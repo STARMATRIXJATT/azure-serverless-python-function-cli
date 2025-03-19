@@ -1,0 +1,25 @@
+name: Deploy Azure Function via CLI
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Azure CLI
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Execute Deployment Script
+        run: |
+          chmod +x scripts/create-serverless-function.sh
+          ./scripts/create-serverless-function.sh
+
+      - name: Logout from Azure
+        run: az logout
